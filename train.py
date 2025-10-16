@@ -5,33 +5,42 @@ from sklearn.model_selection import train_test_split
 import joblib
 import os
 import json
+import numpy as np
 
+# Load data
 Xy = load_diabetes(as_frame=True)
 X = Xy.frame.drop(columns=["target"])
 y = Xy.frame["target"]
 
+# Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Scale features
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
+# Train model
 model = LinearRegression()
 model.fit(X_train_scaled, y_train)
 
-# Create model folder if it doesn't exist
+# Create model folder
 os.makedirs("model", exist_ok=True)
 
 # Save model
 joblib.dump(model, "model/model.joblib")
 
-# Save metrics
+# Evaluate
 y_pred = model.predict(X_test_scaled)
-rmse = ((y_test - y_pred) ** 2).mean() ** 0.5
-metrics = {"rmse": rmse, "model_version": "v0.1"}
+rmse = np.sqrt(((y_test - y_pred) ** 2).mean())
+
+metrics = {
+    "rmse": float(rmse),
+    "model_version": "v0.1"
+}
+
 with open("model/metrics.json", "w") as f:
     json.dump(metrics, f)
 
-print("Model trained and saved!")
-
-
+print("✅ Model trained and saved!")
+print(metrics)
