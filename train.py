@@ -1,6 +1,3 @@
-app/app.py
-
-
 from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import StandardScaler
