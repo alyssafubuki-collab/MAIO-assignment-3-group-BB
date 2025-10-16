@@ -30,3 +30,12 @@ jobs:
         with:
           name: model-artifacts
           path: model/
+
+      - name: Upload model to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            model/model.joblib
+            model/metrics.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
