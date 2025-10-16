@@ -37,5 +37,4 @@ with open("model/metrics.json", "w") as f:
 
 print("Model trained and saved!")
 
-Add train.py v0.1
 
