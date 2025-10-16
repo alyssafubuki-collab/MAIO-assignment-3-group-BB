@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - 'v*'
-      
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
@@ -53,6 +53,4 @@ jobs:
         tag: ${{ github.ref_name }}
         name: Release ${{ github.ref_name }}
         body: "Automated release of virtual-diabetes"
-        files: |
-          model/model.joblib
-          model/metrics.json
+        artifacts: model/
