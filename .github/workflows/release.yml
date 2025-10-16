@@ -43,6 +43,7 @@ jobs:
     - name: Push Docker image
       run: |
         docker push ghcr.io/${{ github.repository_owner }}/virtual-diabetes:${GITHUB_REF##*/}
+        
     - name: Upload model artifacts
       uses: actions/upload-artifact@v3
       with:
@@ -50,6 +51,7 @@ jobs:
         path: |
           model/model.joblib
           model/metrics.json
+
 
     - name: Create GitHub Release
       uses: ncipollo/release-action@v1
