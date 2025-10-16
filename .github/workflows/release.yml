@@ -23,7 +23,16 @@ jobs:
           pip install -r requirements.txt
 
       - name: Train model
-        run: python train.py
+        run: |
+          echo "GitHub tag: ${GITHUB_REF_NAME}"
+          if [[ "${GITHUB_REF_NAME}" == "v0.1"* ]]; then
+            python train.py
+          elif [[ "${GITHUB_REF_NAME}" == "v0.2"* ]]; then
+            python train_v2.py
+          else
+            echo "No matching train script for tag ${GITHUB_REF_NAME}"
+            exit 1
+          fi
 
       - name: Upload model artifacts
         uses: actions/upload-artifact@v4
@@ -31,7 +40,7 @@ jobs:
           name: model-artifacts
           path: model/
 
-      - name: Upload model to release
+      - name: Attach model files to release
         uses: softprops/action-gh-release@v2
         with:
           files: |
