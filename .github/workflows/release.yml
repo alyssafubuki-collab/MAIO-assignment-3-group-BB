@@ -28,7 +28,8 @@ jobs:
           if [[ "${GITHUB_REF_NAME}" == "v0.1"* ]]; then
             python train.py
           elif [[ "${GITHUB_REF_NAME}" == "v0.2"* ]]; then
-            python train_v2.py
+            # use RandomForest for v0.2 (rf variant)
+            python train_v2_rf.py
           else
             echo "No matching train script for tag ${GITHUB_REF_NAME}"
             exit 1
