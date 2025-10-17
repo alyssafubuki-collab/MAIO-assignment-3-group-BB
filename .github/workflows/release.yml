@@ -29,21 +29,21 @@ jobs:
       - name: Show GitHub tag
         run: echo "GitHub tag: ${GITHUB_REF_NAME}"
 
-      # Build Docker image with correct MODEL_VERSION
-      - name: Build Docker image
+      - name: Build Docker image with correct MODEL_VERSION
         run: |
           TAG_NAME=${GITHUB_REF_NAME}
           echo "Building Docker image for $TAG_NAME"
           if [[ "$TAG_NAME" == v0.1* ]]; then
-            docker build --build-arg MODEL_VERSION=v0.1 -t virtual-diabetes:v0.1 .
+              docker build --build-arg MODEL_VERSION=v0.1 -t virtual-diabetes:v0.1 .
           elif [[ "$TAG_NAME" == v0.2-rf* ]]; then
-            docker build --build-arg MODEL_VERSION=v0.2-rf -t virtual-diabetes:v0.2-rf .
+              docker build --build-arg MODEL_VERSION=v0.2-rf -t virtual-diabetes:v0.2-rf .
           elif [[ "$TAG_NAME" == v0.2* ]]; then
-            docker build --build-arg MODEL_VERSION=v0.2 -t virtual-diabetes:v0.2 .
+              docker build --build-arg MODEL_VERSION=v0.2 -t virtual-diabetes:v0.2 .
           else
-            echo "No matching model version for tag $TAG_NAME"
-            exit 1
+              echo "No matching model version for tag $TAG_NAME"
+              exit 1
           fi
+
 
       # Log in to GitHub Container Registry (GHCR)
       - name: Login to GHCR
