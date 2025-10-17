@@ -17,7 +17,6 @@ This service predicts a continuous **progression index** — higher = worse prog
 |----------|--------|------|--------|
 | v0.1 | LinearRegression | 53.85 | Baseline |
 | v0.2 | Ridge Regression | 53.81 | Slight improvement |
-| v0.2-rf | RandomForestRegressor | 54.59 | Better high-risk detection |
 
 ---
 
