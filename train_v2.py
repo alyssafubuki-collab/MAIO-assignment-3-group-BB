@@ -1,4 +1,3 @@
-# train_v2.py
 import json
 import joblib
 from sklearn.datasets import load_diabetes
@@ -20,7 +19,7 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Train model
+# Train Ridge model
 model = Ridge(alpha=1.0, random_state=42)
 model.fit(X_train_scaled, y_train)
 
@@ -28,7 +27,7 @@ model.fit(X_train_scaled, y_train)
 y_pred = model.predict(X_test_scaled)
 rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 
-# Save
+# Save model and metrics
 os.makedirs("model", exist_ok=True)
 joblib.dump({"scaler": scaler, "model": model}, "model/model.joblib")
 
