@@ -24,13 +24,13 @@ jobs:
 
       - name: Train model
         run: |
-          echo "GitHub tag: ${GITHUB_REF_NAME}"
-          if [[ "${GITHUB_REF_NAME}" == "v0.1"* ]]; then
+          echo "GitHub tag: ${{ github.ref_name }}"
+          if [[ "${{ github.ref_name }}" == "v0.1"* ]]; then
             python train.py
-          elif [[ "${GITHUB_REF_NAME}" == "v0.2"* ]]; then
+          elif [[ "${{ github.ref_name }}" == "v0.2"* ]]; then
             python train_v2.py
           else
-            echo "No matching train script for tag ${GITHUB_REF_NAME}"
+            echo "No matching train script for tag ${{ github.ref_name }}"
             exit 1
           fi
 
