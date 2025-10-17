@@ -16,7 +16,7 @@
 ## v0.2 — Ridge Regression (improvement)
 - **Model:** `Ridge(alpha=1.0)`
 - **Pipeline:** `StandardScaler + Ridge`
-- **RMSE:** **53.81**
+- **RMSE:** **53.777**
 - **Improvements:**
   - Slight RMSE improvement.
   - More stable predictions due to L2 regularization.
