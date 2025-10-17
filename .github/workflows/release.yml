@@ -23,7 +23,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Show GitHub tag
-        run: echo "GitHub tag: ${GITHUB_REF_NAME}"
+        run: echo "GitHub tag: ${{ github.ref_name }}"
+
 
       - name: Build Docker image with correct MODEL_VERSION
         run: |
