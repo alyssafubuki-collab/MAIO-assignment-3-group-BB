@@ -1,49 +1,39 @@
+# train_v2.py
+import json
+import joblib
 from sklearn.datasets import load_diabetes
 from sklearn.linear_model import Ridge
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-import joblib
-import os
-import json
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
 import numpy as np
+import os
 
-# 1️⃣ Charger les données
+# Load dataset
 Xy = load_diabetes(as_frame=True)
 X = Xy.frame.drop(columns=["target"])
 y = Xy.frame["target"]
 
-# 2️⃣ Séparer train/test
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-# 3️⃣ Mise à l’échelle
+# Split and scale
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# 4️⃣ Nouveau modèle : Ridge Regression
-model = Ridge(alpha=0.5)
+# Train model
+model = Ridge(alpha=1.0, random_state=42)
 model.fit(X_train_scaled, y_train)
 
-# 5️⃣ Créer dossier model si inexistant
-os.makedirs("model", exist_ok=True)
-
-# 6️⃣ Sauvegarder modèle
-joblib.dump(model, "model/model.joblib")
-
-# 7️⃣ Calculer métriques
+# Evaluate
 y_pred = model.predict(X_test_scaled)
-rmse = np.sqrt(((y_test - y_pred) ** 2).mean())
+rmse = np.sqrt(mean_squared_error(y_test, y_pred))
 
-metrics = {
-    "rmse": float(rmse),
-    "model_version": "v0.2"
-}
+# Save
+os.makedirs("model", exist_ok=True)
+joblib.dump({"scaler": scaler, "model": model}, "model/model.joblib")
 
-# 8️⃣ Sauvegarder métriques
+metrics = {"rmse": rmse, "model_version": "v0.2"}
 with open("model/metrics.json", "w") as f:
     json.dump(metrics, f)
 
-print("✅ Nouveau modèle Ridge (v0.2) entraîné et sauvegardé !")
-print(f"RMSE: {metrics['rmse']}")
+print(f"✅ Ridge Regression (v0.2) trained — RMSE: {rmse:.3f}")
