@@ -37,4 +37,4 @@ metrics = {
 with open("model/metrics.json", "w") as f:
     json.dump(metrics, f, indent=2)
 
-print(f"✅ LinearRegression (v0.1) trained — RMSE: {rmse:.3f}")
+print(f" LinearRegression (v0.1) trained — RMSE: {rmse:.3f}")
