@@ -1,39 +1,51 @@
-# train.py
-import json
-import joblib
 from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error
-import numpy as np
-import os
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, precision_score, recall_score
+import numpy as np, joblib, os, json
 
-# Load dataset
+# === Load data ===
 Xy = load_diabetes(as_frame=True)
 X = Xy.frame.drop(columns=["target"])
 y = Xy.frame["target"]
 
-# Split and scale
+# === Split ===
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# === Scale ===
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Train model
+# === Train model ===
 model = LinearRegression()
 model.fit(X_train_scaled, y_train)
 
-# Evaluate
+# === Predict ===
 y_pred = model.predict(X_test_scaled)
-rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+rmse = mean_squared_error(y_test, y_pred, squared=False)
 
-# Save
+# === High-risk flag ===
+threshold = np.percentile(y_train, 75)
+y_true_flag = (y_test > threshold).astype(int)
+y_pred_flag = (y_pred > threshold).astype(int)
+precision = precision_score(y_true_flag, y_pred_flag)
+recall = recall_score(y_true_flag, y_pred_flag)
+
+# === Save ===
 os.makedirs("model", exist_ok=True)
-joblib.dump({"scaler": scaler, "model": model}, "model/model.joblib")
+joblib.dump(model, "model/model.joblib")
 
-metrics = {"rmse": rmse, "model_version": "v0.1"}
+metrics = {
+    "rmse": rmse,
+    "precision": precision,
+    "recall": recall,
+    "threshold": threshold,
+    "model_version": "v0.1",
+}
 with open("model/metrics.json", "w") as f:
-    json.dump(metrics, f)
+    json.dump(metrics, f, indent=2)
 
 print(f"✅ LinearRegression (v0.1) trained — RMSE: {rmse:.3f}")
+print(f"📈 Precision: {precision:.3f}, Recall: {recall:.3f}")
