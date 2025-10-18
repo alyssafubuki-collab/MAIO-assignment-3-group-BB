@@ -26,5 +26,5 @@
   - `model/metrics.json`
 - **Model version:** `v0.2`
 
-
+Future iterations will focus on improving recall using tree-based models or threshold tuning
 
