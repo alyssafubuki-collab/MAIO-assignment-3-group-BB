@@ -54,10 +54,7 @@ uvicorn app.app:app --host 0.0.0.0 --port 8080
 ### GET /health
 Returns model status and version.
 ```json
-{
-  "status": "ok",
-  "model_version": "v0.2"
-}
+{ "status": "ok", "model_version": "v0.2" }
 ```
 
 ### POST /predict
@@ -79,9 +76,7 @@ Takes a JSON of standardized diabetes features and returns a numeric prediction.
 
 Response example:
 ```json
-{
-  "prediction": 235.94
-}
+{ "prediction": 235.94 }
 ```
 
 ---
@@ -110,6 +105,12 @@ docker run -p 8080:8080 virtual-diabetes:v0.2
 curl -X POST http://127.0.0.1:8080/predict \
 -H "Content-Type: application/json" \
 -d '{"age":0.02,"sex":-0.044,"bmi":0.06,"bp":-0.03,"s1":-0.02,"s2":0.03,"s3":-0.02,"s4":0.02,"s5":0.02,"s6":-0.001}'
+```
+
+
+Response example:
+```json
+{ "prediction": 235.949637 }
 ```
 
 ---
