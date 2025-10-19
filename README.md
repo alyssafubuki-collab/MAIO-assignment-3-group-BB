@@ -16,7 +16,7 @@ This service predicts a continuous **progression index** — higher = worse prog
 | Version | Model | RMSE | Notes |
 |----------|--------|------|--------|
 | v0.1 | LinearRegression | 53.85 | Baseline |
-| v0.2 | Ridge Regression | 53.81 | Slight improvement |
+| v0.2 | Ridge Regression | 53.77 | Slight improvement |
 
 ---
 
