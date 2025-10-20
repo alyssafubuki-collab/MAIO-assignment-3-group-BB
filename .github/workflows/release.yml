@@ -34,30 +34,35 @@ jobs:
             exit 1
           fi
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          docker build -t $IMAGE_NAME .
+          echo "Built image: $IMAGE_NAME"
+
+      - name: Smoke test container
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          docker run --rm $IMAGE_NAME python -c "print('Container test passed')"
+
+      - name: Push Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          docker push $IMAGE_NAME
+          echo "Pushed image: $IMAGE_NAME"
+
       - name: Upload model artifacts
         uses: actions/upload-artifact@v4
         with:
           name: model-artifacts
           path: model/
-
-      - name: Build and push Docker image to GHCR
-        run: |
-          # The repository name (e.g., alyssafubuki-collab/MAIO-assignment-3-group-BB)
-          REPO_WITH_CASE="${{ github.repository }}"
-          
-          # Convert the repository path to lowercase (e.g., alyssafubuki-collab/maio-assignment-3-group-bb)
-          # This is the key fix for the "must be lowercase" error.
-          LOWER_REPO=$(echo "$REPO_WITH_CASE" | tr '[:upper:]' '[:lower:]')
-          
-          # The final, correct, and valid image tag
-          IMAGE_NAME="ghcr.io/$LOWER_REPO:${{ github.ref_name }}"
-          
-          echo "🔧 Building Docker image: $IMAGE_NAME"
-          docker build -t "$IMAGE_NAME" .
-          echo "Logging into GitHub Container Registry"
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          echo "Pushing Docker image..."
-          docker push "$IMAGE_NAME"
 
       - name: Attach model files to release
         uses: softprops/action-gh-release@v2
