@@ -24,7 +24,8 @@ model.fit(X_train_scaled, y_train)
 
 # === Predict ===
 y_pred = model.predict(X_test_scaled)
-rmse = mean_squared_error(y_test, y_pred, squared=False)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
 
 # === Save ===
 os.makedirs("model", exist_ok=True)
