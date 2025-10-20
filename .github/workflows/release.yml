@@ -44,16 +44,17 @@ jobs:
         run: |
           # The repository name (e.g., alyssafubuki-collab/MAIO-assignment-3-group-BB)
           REPO_WITH_CASE="${{ github.repository }}"
-          # Convert to lowercase (e.g., alyssafubuki-collab/maio-assignment-3-group-bb)
+          
+          # Convert the repository path to lowercase (e.g., alyssafubuki-collab/maio-assignment-3-group-bb)
+          # This is the key fix for the "must be lowercase" error.
           LOWER_REPO=$(echo "$REPO_WITH_CASE" | tr '[:upper:]' '[:lower:]')
           
-          # The final, correct image tag
+          # The final, correct, and valid image tag
           IMAGE_NAME="ghcr.io/$LOWER_REPO:${{ github.ref_name }}"
           
           echo "🔧 Building Docker image: $IMAGE_NAME"
           docker build -t "$IMAGE_NAME" .
           echo "Logging into GitHub Container Registry"
-          # Use GITHUB_TOKEN for authentication
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           echo "Pushing Docker image..."
           docker push "$IMAGE_NAME"
